@@ -20,31 +20,53 @@ header {
 }
 
 article {
+    
     margin: 0 auto;
     max-width: 700px;
 }
 
 h1 {
+    padding-bottom: 2%;
+    font-size: 28px;
     text-align: center;
 }
 
-ol {
-    padding-left: 5%;
-}
-
 button {
-    background-color: rgb(57, 70, 66);
+    background-color: rgb(61, 77, 72);
     color: white;
     opacity: 1;
     padding: 0.5%;
     cursor: pointer;
 }
 
+.welcome-screen {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+
+.welcome-screen p {
+    font-size: 16px;
+    padding-bottom: 2%;
+}
+
 button:hover {
     opacity: 0.6;
 }
 
+.answers-display {
+display: flex;
+flex-direction: column; 
+padding-top: 2%;
+align-items: flex-start;
+}
+
+.answers-button {
+    margin-bottom: 2%;
+}
+
 .hide-content {
-    display:none;
+    display: none;
 }
 
