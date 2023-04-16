@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css" />
+    <title>Code Quiz</title>
+</head>
+
+<body>
+    <header>
+        <a href="#view-highscores">View Highscores</a>
+        <p class="timer">Time:</p>
+    </header>
+
+    <div class="welcome-screen">
+        <h1>Coding Quiz Challenge</h1>
+        <p>Welcome to coding quiz challenge! Please press Start to begin your quiz. You have 60 seconds to complete, but
+            be careful, for every wrong answer, you will receive a 10 second penalty. Good luck!</p>
+    </div>
+    <div class="quiz-question">
+        <h2>First question</h2>
+        <ol>
+            <li>Opt 1</li>
+            <li>Opt 2</li>
+            <li>Opt 3</li>
+        </ol>
+        <p id="first-answer"></p> <!-- correct/incorrect -->
+    </div>
+    <div class="quiz-question">
+        <h2>Second question</h2>
+        <ol>
+            <li>Opt 1</li>
+            <li>Opt 2</li>
+            <li>Opt 3</li>
+        </ol>
+    </div>
+    <div class="quiz-question">
+        <h2>Third question</h2>
+        <ol>
+            <li>Opt 1</li>
+            <li>Opt 2</li>
+            <li>Opt 3</li>
+        </ol>
+    </div>
+    <div class="all-done">
+        <h3>All Done!</h3>
+        <p>Your final score: </p>
+        <label for="initials">Enter initials:</label>
+        <input type="text" id="initials" name="initials">
+        <button>Submit</button>
+    </div>
+    <div id="#view-highscores" class="Highscores">
+        <h3>Highscores</h3>
+        <ol>
+            <li id="first-place">First place initials</li>
+            <li id="second-place">Second place initials</li>
+            <li id="third-place">Third place initials</li>
+            <li id="fourth-place">Fourth place initials</li>
+            <li id="fifth-place">Fifth place initials</li>
+        </ol>
+        <button>Start Over</button>
+        <button>Clear Highscores</button>
+    </div>
+
+    <script src="./js/script.js"></script>
+</body>
+
+</html>
