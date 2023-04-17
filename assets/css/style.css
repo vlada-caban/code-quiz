@@ -66,6 +66,11 @@ align-items: flex-start;
     margin-bottom: 2%;
 }
 
+#answer {
+    text-align: center;
+    color: rgb(73, 85, 81);
+}
+
 .hide-content {
     display: none;
 }

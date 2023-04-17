@@ -1,11 +1,11 @@
 // To start user clicks the start button
 
-
-
 const startQuizBtn = document.querySelector(".start-button");
 let questionNumber = 0;
 let quizTime = 60;
 const timerCount = document.querySelector(".timer");
+let answer = document.getElementById("answer");
+
 
 //function to count time
 function startTimer() {
@@ -18,7 +18,6 @@ function startTimer() {
       //clearInterval(timerInterval);
       //displayAllDone(); //do i need to display all done if timer is 0?
       clearTimeout(timerInterval);
-      
     }
   }, 1000);
 }
@@ -33,7 +32,7 @@ function showHighscores() {
   //pull scores from local storage
 }
 
-//quiz questions
+//questions constructor
 const question = [
   {
     question: "First question",
@@ -62,40 +61,33 @@ const question = [
   },
 ];
 
-// displayCorrect = function () {
-//   let correctAnswer = document.createElement("p");
-//   correctAnswer.innerText = 'Correct!';
-// correctAnswer.parentElement.append(correctAnswer);
-// }
 
-//questions constructor
+
+//questions display one by one
 let loadQuestion = function () {
-
   document.getElementById("questions").innerText = "";
+
   let currentQuestion = question[questionNumber];
-  let parentDiv = document.createElement("div");
-  //parentDiv.classList.add("questions-display");
 
   let questionHeader = document.createElement("h2");
   questionHeader.innerText = currentQuestion.question;
-  
+
   let btnDiv = document.createElement("div"); //division for all the choices
   btnDiv.classList.add("answers-display");
 
-  //let correctOrWrong = document.createElement("p");
+  //  let correctOrWrong = document.createElement("p");
 
   for (let i = 0; i < currentQuestion.choices.length; i++) {
     let choiceBtn = document.createElement("button");
     choiceBtn.classList.add("answers-button");
     choiceBtn.innerHTML = currentQuestion.choices[i];
+
+    //event listener for answer selection
     choiceBtn.addEventListener("click", function (event) {
       event.preventDefault();
       let selectedChoice = event.target.innerText;
       if (selectedChoice === currentQuestion.answer) {
-        // displayCorrect();
-        //display that answers is correct
-        //correctOrWrong.innerText = "Correct!";
-        //go to the next question
+        answer.innerText = "Correct!";
         questionNumber++;
         loadQuestion();
       } else {
@@ -103,41 +95,34 @@ let loadQuestion = function () {
         if (quizTime > 10) {
           quizTime -= 10;
         } else {
-          quizTime = 1;
+          quizTime = 1; //not 0 because it will still go through one loop and get to 0
         }
-        // displayWrong();
-        //display that answer is incorrect
-        //correctOrWrong.innerText = "Wrong!";
-        //go to the same question again
-        loadQuestion(); 
+        answer.innerText = "Wrong!";
+        loadQuestion();
       }
     });
     btnDiv.append(choiceBtn);
   }
-  parentDiv.append(questionHeader, btnDiv);
-  document.getElementById("questions").append(parentDiv);
 
+  document.getElementById("questions").append(questionHeader, btnDiv);
 };
 
-startQuiz = function (event) {
+let startQuiz = function (event) {
   event.preventDefault();
 
   //hide welcome screen
   document.querySelector(".welcome-screen").classList.add("hide-content");
+
+  //starting timer
   startTimer();
+
+  //loading questions
   loadQuestion();
 };
 
 // Event listener when user clicks Start quiz button
 startQuizBtn.addEventListener("click", startQuiz);
 
-//when start button pressed times start counting down and first quiz question to appear and welcome screen to disappear
-
-//user to select answer (even listener to click)
-
-//if correct answer selected, show Correct! underneath and jump to next question
-
-//if incorrect answer is selected, show "Wrong!", deduct 10 second from the timer and allow user to select new answer until correct answer is selected
 
 //after all questions are answered, all done screen to appear with final score of how much time left and option to enter initials
 
