@@ -1,23 +1,19 @@
 // To start user clicks the start button
-
 const startQuizBtn = document.querySelector(".start-button");
+
+//global variables
 let questionNumber = 0;
 let quizTime = 60;
 const timerCount = document.querySelector(".timer");
 let answer = document.getElementById("answer");
-
 
 //function to count time
 function startTimer() {
   const timerInterval = setInterval(function () {
     quizTime--;
     timerCount.textContent = "Timer: " + quizTime;
-
-    if (quizTime <= 0) {
-      // Stops execution of action at set interval
-      //clearInterval(timerInterval);
-      //displayAllDone(); //do i need to display all done if timer is 0?
-      clearTimeout(timerInterval);
+    if (quizTime === 0) {
+      clearInterval(timerInterval);
     }
   }, 1000);
 }
@@ -33,35 +29,58 @@ function showHighscores() {
 }
 
 //questions constructor
+
+//questions are taken from https://www.w3schools.com/ JavaScript quiz
 const question = [
   {
-    question: "First question",
-    choices: ["opt1", "opt2", "opt3"],
-    answer: "opt1",
+    question: "Which event occurs when the user clicks on an HTML element?",
+    choices: ["onclick", 
+    "onchange", 
+    "onmouseclick"],
+    answer: "onclick",
   },
   {
-    question: "second question",
-    choices: ["opt4", "opt5", "opt6"],
-    answer: "opt6",
+    question: 'How do you call a function named "myFunction"?',
+    choices: [
+      "call function myFunction()",
+      "myFunction()",
+      "call myFunction()",
+    ],
+    answer: "myFunction()",
   },
   {
-    question: "third question",
-    choices: ["opt4", "opt5", "opt6"],
-    answer: "opt6",
+    question: "How to write an IF statement in JavaScript?",
+    choices: ["if i = 5", 
+    "if i = 5 then", 
+    "if (i == 5)"],
+    answer: "if (i == 5)",
   },
   {
-    question: "fourth question",
-    choices: ["opt4", "opt5", "opt6"],
-    answer: "opt4",
+    question: "How does a FOR loop start?",
+    choices: [
+      "for (i = 0; i <= 5)",
+      "for (i = 0; i <= 5; i++)",
+      "for (i <= 5; i++)",
+    ],
+    answer: "for (i = 0; i <= 5; i++)",
   },
   {
-    question: "fifth question",
-    choices: ["opt4", "opt5", "opt6"],
-    answer: "opt5",
+    question: "What is the correct way to write a JavaScript array?",
+    choices: [
+      'var colors = (1:"red", 2:"green", 3:"blue")',
+      'var colors = "red", "green", "blue"',
+      'var colors = ["red", "green", "blue"]',
+    ],
+    answer: 'var colors = ["red", "green", "blue"]',
+  },
+  {
+    question: "How do you round the number 7.25, to the nearest integer?",
+    choices: ["Math.round(7.25)", 
+    "Math.rnd(7.25)", 
+    "round(7.25)"],
+    answer: "Math.round(7.25)",
   },
 ];
-
-
 
 //questions display one by one
 let loadQuestion = function () {
@@ -103,7 +122,6 @@ let loadQuestion = function () {
     });
     btnDiv.append(choiceBtn);
   }
-
   document.getElementById("questions").append(questionHeader, btnDiv);
 };
 
@@ -122,7 +140,6 @@ let startQuiz = function (event) {
 
 // Event listener when user clicks Start quiz button
 startQuizBtn.addEventListener("click", startQuiz);
-
 
 //after all questions are answered, all done screen to appear with final score of how much time left and option to enter initials
 
