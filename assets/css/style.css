@@ -73,6 +73,21 @@ align-items: flex-start;
     color: rgb(73, 85, 81);
 }
 
+#all-done {
+    display: flex;
+    flex-direction: column;
+    align-content:center;
+    align-items: start;
+}
+
+#all-done label {
+    margin-top: 2%;
+}
+
+#all-done button {
+    margin-top: 2%;
+}
+
 .hide-content {
     display: none;
 }
