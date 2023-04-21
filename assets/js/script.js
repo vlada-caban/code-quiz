@@ -1,17 +1,15 @@
-// To start user clicks the start button
 const startQuizBtn = document.querySelector(".start-button");
-let timerCount = document.querySelector(".timer");
 
-//global variables
+
+//global variables set up with initial values on page load
 let questionNumber = 0;
 let quizTime = 60;
 let correctAnswersCounter = 0;
 let finalScore = 0;
-
-
+let highScoresArray;
 
 //array of questions as objects
-//questions are taken from https://www.w3schools.com/ 
+//questions are taken from https://www.w3schools.com/
 const question = [
   {
     question: "Which event occurs when the user clicks on an HTML element?",
@@ -57,75 +55,88 @@ const question = [
   },
 ];
 
-
-
 let questionsLeft = question.length;
 //console.log(questionsLeft);
 
+
+let timerInterval;
+
 //function to count time
 function startTimer() {
-    const timerInterval = setInterval(function () {
+  let timerCount = document.querySelector(".timer");
+  timerInterval = setInterval(function () {
     quizTime--;
     timerCount.textContent = "Timer: " + quizTime;
     if (quizTime === 0) {
       clearInterval(timerInterval);
       //timerCount.textContent = ""
-      // displayAllDone();
+      displayAllDone();
     }
   }, 1000);
 }
 
+// function checkTimer() {
+//   if (quizTime === 0) {
+//     displayAllDone();
+//   } else {
+//     return true;
+//   }
+// }
+
+//function to display High Scores
+
 function showHighscores() {
   //create all elements for high scores
   //pull scores from local storage
-const showScoresSection = document.querySelector("#view-highscores");
-showScoresSection.innerHTML = "";
+  const showScoresSection = document.querySelector("#view-highscores");
+  showScoresSection.innerHTML = "";
 
-for (let i=0; i<highScores.length; i++) {
-  const score = highScores[i];
+  for (let i = 0; i < highScores.length; i++) {
+    const score = highScores[i];
 
-//need to create element to display initials and score
+    //need to create element to display initials and score
 
-//render element to the page in ordered list
-
+    //render element to the page in ordered list
+  }
 }
-
-}
-
-let highScoresArray; 
 
 function saveScores(score, initials) {
-  alert ("Good job " + initials + "\nScore:" + score);
+  alert("Good job " + initials + "\nScore:" + score);
 
-  
+  if (localStorage.getItem("highScoresArray") === null) {
+    highScoresArray = []; //if nothing was stored yet or it was cleared, setting up new array to store highscores
+  } else {
+    highScoresArray = JSON.parse(localStorage.getItem("highScoresArray"));
+  }
 
- if (localStorage.getItem("highScoresArray") === null) {
-  highScoresArray = []; //if nothing was stored yet, setting up new array to store highscores
-} else {
-  highScoresArray = JSON.parse(localStorage.getItem("highScoresArray"));
-}
+  console.log(localStorage.getItem("highScoresArray"));
 
-console.log(localStorage.getItem("highScoresArray"));
+  const result = {
+    initials: initials.trim(),
+    score: score,
+  };
 
-const result = {
-  initials: initials.trim(),
-  score: score
-};
+  highScoresArray.push(result);
 
-highScoresArray.push(result);
-
-localStorage.setItem("highScoresArray", JSON.stringify(highScoresArray));
-
+  localStorage.setItem("highScoresArray", JSON.stringify(highScoresArray));
 }
 
 let displayAllDone = function () {
+  //clearing questions section
+  document.getElementById("questions").innerText = "";
+
+  //clearing all done section
+  document.getElementById("all-done").innerText = "";
+
+  //saving leftover time as a final score
   finalScore = quizTime;
 
-  //clearing timer
-  quizTime = 1;
-  
-    //clearing questions section
-    document.getElementById("questions").innerText = "";
+
+  clearInterval(timerInterval);
+  //clearing timer if score is not 0
+  // if (finalScore > 0) {
+  //   quizTime = 1;
+  // }
 
   //rendering all done section
   let allDoneSection = document.getElementById("all-done");
@@ -133,7 +144,8 @@ let displayAllDone = function () {
   let finalScoreParagraph = document.createElement("p");
   let enterInitialsLabel = document.createElement("label");
   enterInitialsLabel.for = "initials";
-  enterInitialsLabel.innerHTML = "Please enter your initials and click Submit button to save your score: ";
+  enterInitialsLabel.innerHTML =
+    "Please enter your initials and click Submit button to save your score: ";
   let enterInitials = document.createElement("input");
   enterInitials.id = "initials";
   let submitBtn = document.createElement("button");
@@ -142,7 +154,7 @@ let displayAllDone = function () {
   restartBtn.innerHTML = "Try again";
 
   if (finalScore < 1) {
-    allDoneTitle.innerText = "All done.";
+    allDoneTitle.innerText = "You ran out of time.";
     finalScoreParagraph.innerText = `Your final score is ${finalScore}. Better luck next time. Try again to improve!`;
   } else {
     allDoneTitle.innerText = "Well done!";
@@ -163,13 +175,11 @@ let displayAllDone = function () {
     saveScores(finalScore, enterInitials.value.toUpperCase());
   });
   restartBtn.addEventListener("click", restartQuiz);
-
 };
-
 
 //questions display one by one
 let loadQuestion = function () {
-  
+  //checkTimer(); 
   let answer = document.getElementById("answer");
   document.getElementById("questions").innerText = "";
 
@@ -198,9 +208,9 @@ let loadQuestion = function () {
           answer.innerText = "";
         }, 500);
         questionNumber++;
-        console.log(questionNumber);
+       // console.log(questionNumber);
         questionsLeft--;
-        console.log(questionsLeft);
+        //console.log(questionsLeft);
 
         if (questionsLeft > 0) {
           loadQuestion();
@@ -227,8 +237,9 @@ let loadQuestion = function () {
 let restartQuiz = function (event) {
   event.preventDefault();
 
-  document.getElementById("all-done").innerText = ""
-  
+  document.getElementById("all-done").innerText = "";
+
+  //resetting all the initial values to 0
   questionNumber = 0;
   quizTime = 60;
   correctAnswersCounter = 0;
@@ -240,8 +251,7 @@ let restartQuiz = function (event) {
 
   //reloading questions
   loadQuestion();
-}
-
+};
 
 let startQuiz = function (event) {
   event.preventDefault();
@@ -258,9 +268,3 @@ let startQuiz = function (event) {
 
 // Event listener when user clicks Start quiz button
 startQuizBtn.addEventListener("click", startQuiz);
-
-//after all questions are answered, all done screen to appear with final score of how much time left and option to enter initials
-
-//when initials entered and submit button is pressed, highscores to appear
-
-//user can see all saved high scores up to 5 and either clear screen or start over
