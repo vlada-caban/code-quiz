@@ -88,6 +88,10 @@ align-items: flex-start;
     margin-top: 2%;
 }
 
+#view-highscores button {
+    margin-right: 2%; 
+}
+
 .hide-content {
     display: none;
 }
