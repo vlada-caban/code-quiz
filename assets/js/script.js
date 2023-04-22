@@ -151,7 +151,7 @@ function showHighscores() {
 }
 
 function saveScores(score, initials) {
-  alert("Good job, " + initials + "\nYour Score:" + score);
+  alert("Thank you for taking the quiz!" + "\nSaved initials: " + initials + "\nYour Score: " + score);
 
   if (localStorage.getItem("highScoresArray") === null) {
     highScoresArray = []; //if nothing was stored yet or it was cleared, setting up new array to store highscores
@@ -198,10 +198,10 @@ let displayAllDone = function () {
 
   if (finalScore < 1) {
     allDoneTitle.innerText = "You ran out of time.";
-    finalScoreParagraph.innerText = `Your final score is ${finalScore}. Better luck next time. Try again to improve!`;
+    finalScoreParagraph.innerText = `You answered ${correctAnswersCounter} questions correctly.  Your final score is ${finalScore}. Better luck next time. Try again to improve!`;
   } else {
     allDoneTitle.innerText = "Well done!";
-    finalScoreParagraph.innerText = `Your final score is ${finalScore}. Try again to improve!`;
+    finalScoreParagraph.innerText = `You answered ${correctAnswersCounter} questions correctly.  Your final score is ${finalScore}. Try again to improve!`;
   }
 
   allDoneSection.append(
@@ -252,6 +252,7 @@ let loadQuestion = function () {
 
       //if selected choice if correct, display correct
       if (selectedChoice === currentQuestion.answer) {
+        correctAnswersCounter++;
         answer.innerText = "Correct!";
         answer.setAttribute("style", "color: green; font-weight: bold");
       } else {
