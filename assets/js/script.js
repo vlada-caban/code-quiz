@@ -66,10 +66,13 @@ function startTimer() {
     quizTime--;
     timerCount.textContent = "Timer: " + quizTime;
     timerCount.setAttribute("style", "color: black; font-weight: normal");
-if (quizTime<10 && quizTime >0) {
-  timerCount.setAttribute("style", "color: red; font-weight: bold");
-}
 
+    //changing time to red bold if under 10 seconds left
+    if (quizTime < 10 && quizTime > 0) {
+      timerCount.setAttribute("style", "color: red; font-weight: bold");
+    }
+
+    // if timer reaches 0, times stops and displaying results
     if (quizTime === 0) {
       clearInterval(timerInterval);
       displayAllDone();
@@ -79,9 +82,8 @@ if (quizTime<10 && quizTime >0) {
 
 //function to display High Scores
 function showHighscores() {
-  //in case jumped from questions screen
+  //in case jumped from questions screen, need to clear timer
   clearInterval(timerInterval);
-
   //clearing questions section if called from questions screen
   document.getElementById("questions").innerText = "";
   //clearing all done section if called from all done screen
@@ -94,37 +96,43 @@ function showHighscores() {
 
   //pull scores from local storage
   let highScoresToDisplay = JSON.parse(localStorage.getItem("highScoresArray"));
-  highScoresToDisplay.sort((a, b) => b.score - a.score);
 
-  console.log(highScoresToDisplay);
-  // showScoresSection.innerHTML = highScoresToDisplay;
+  if (highScoresToDisplay !== null) {
+    //sorting array in descending order after pulled
+    highScoresToDisplay.sort((a, b) => b.score - a.score);
 
-  // displaying maximum top 10 records
-  let howManyToDisplay = 0;
+    //displaying maximum top 10 records
+    let howManyToDisplay = 0;
 
-  if (highScoresToDisplay.length > 10) {
-    howManyToDisplay = 10;
+    if (highScoresToDisplay.length > 10) {
+      howManyToDisplay = 10;
+    } else {
+      howManyToDisplay = highScoresToDisplay.length;
+    }
+
+    //create all elements to show highscores
+    let scoreTitle = document.createElement("h3");
+    scoreTitle.innerHTML = "High Scores:";
+
+    let divScore = document.createElement("div");
+
+    for (let i = 0; i < howManyToDisplay; i++) {
+      let initials = highScoresToDisplay[i].initials;
+      let score = highScoresToDisplay[i].score;
+      let position = i + 1;
+      let scoreString =
+        position + ". " + "Initials: " + initials + " " + "Score: " + score;
+      let scoreToDisplay = document.createElement("p");
+      scoreToDisplay.innerHTML = scoreString;
+      scoreToDisplay.setAttribute("style", "margin: 2%");
+      divScore.appendChild(scoreToDisplay);
+    }
+    showScoresSection.append(scoreTitle, divScore);
   } else {
-    howManyToDisplay = highScoresToDisplay.length;
-  }
-
-  console.log(howManyToDisplay);
-  //create all elements for high scores
-
-  let scoreTitle = document.createElement("h3");
-  scoreTitle.innerHTML = "High Scores:";
-
-  let divScore = document.createElement("div");
-
-  for (let i = 0; i < howManyToDisplay; i++) {
-    let initials = highScoresToDisplay[i].initials;
-    let score = highScoresToDisplay[i].score;
-    let position = i+1;  
-    let scoreString = position + ". " + "Initials: " + initials + " " + "Score: " + score;
-    let scoreToDisplay = document.createElement("p");
-    scoreToDisplay.innerHTML = scoreString;
-    scoreToDisplay.setAttribute("style", "margin: 2%")
-    divScore.appendChild(scoreToDisplay);
+    let scoreTitle = document.createElement("h3");
+    scoreTitle.innerHTML = "No highscores were saved yet!";
+    scoreTitle.setAttribute("style", "margin-bottom: 2%");
+    showScoresSection.append(scoreTitle);
   }
 
   let clearScore = document.createElement("button");
@@ -132,18 +140,23 @@ function showHighscores() {
   let restartBtn = document.createElement("button");
   restartBtn.innerHTML = "Try again";
 
-  showScoresSection.append(scoreTitle, divScore, clearScore, restartBtn);
+  showScoresSection.append(clearScore, restartBtn);
 
   clearScore.addEventListener("click", function (event) {
     event.preventDefault();
-    localStorage.clear;
+    localStorage.clear();
+    showHighscores();
+    // showScoresSection.innerHTML = "";
+    // let noScoreTitle = document.createElement("h3");
+    // noScoreTitle.innerHTML = "No highscores were saved yet!";
+    // showScoresSection.append(noScoreTitle);
   });
 
   restartBtn.addEventListener("click", restartQuiz);
 }
 
 function saveScores(score, initials) {
-  alert("Good job " + initials + "\nScore:" + score);
+  alert("Good job, " + initials + "\nYour Score:" + score);
 
   if (localStorage.getItem("highScoresArray") === null) {
     highScoresArray = []; //if nothing was stored yet or it was cleared, setting up new array to store highscores
@@ -151,18 +164,23 @@ function saveScores(score, initials) {
     highScoresArray = JSON.parse(localStorage.getItem("highScoresArray"));
   }
 
-  console.log(localStorage.getItem("highScoresArray"));
-
-  const result = {
+  let result = {
     initials: initials.trim(),
     score: score,
   };
 
   highScoresArray.push(result);
-
   localStorage.setItem("highScoresArray", JSON.stringify(highScoresArray));
-
   showHighscores();
+
+  //!need to check if info was entered
+  // if (result.initials !== "") {
+  //   highScoresArray.push(result);
+  //   localStorage.setItem("highScoresArray", JSON.stringify(highScoresArray));
+  //   showHighscores();
+  // } else {
+  //   alert("Please enter your initials to save score, thank you!");
+  // }
 }
 
 let displayAllDone = function () {
@@ -220,6 +238,7 @@ let displayAllDone = function () {
 let loadQuestion = function () {
   //checkTimer();
   let answer = document.getElementById("answer");
+
   document.getElementById("questions").innerText = "";
 
   let currentQuestion = question[questionNumber];
@@ -241,31 +260,33 @@ let loadQuestion = function () {
     choiceBtn.addEventListener("click", function (event) {
       event.preventDefault();
       let selectedChoice = event.target.innerText;
+
+      //if selected choice if correct, display correct
       if (selectedChoice === currentQuestion.answer) {
         answer.innerText = "Correct!";
-        setTimeout(function () {
-          answer.innerText = "";
-        }, 500);
-        questionNumber++;
-        questionsLeft--;
-
-        if (questionsLeft > 0) {
-          loadQuestion();
-        } else {
-          displayAllDone();
-        }
+        answer.setAttribute("style", "color: green; font-weight: bold");
       } else {
-        //decrease timer by 10 seconds if more than 10 seconds left
+        //if answer is wrong, decrease timer by 10 seconds if more than 10 seconds left
         if (quizTime > 10) {
           quizTime -= 10;
         } else {
           quizTime = 1; //not 0 because it will still go through one loop and get to 0
         }
         answer.innerText = "Wrong!";
-        setTimeout(function () {
-          answer.innerText = "";
-        }, 500);
+        answer.setAttribute("style", "color: red; font-weight: bold");
+      }
+      questionNumber++;
+      questionsLeft--;
+
+      //clear answer text after displaying for 600ms
+      setTimeout(function () {
+        answer.innerText = "";
+      }, 600);
+
+      if (questionsLeft > 0) {
         loadQuestion();
+      } else {
+        displayAllDone();
       }
     });
   }
