@@ -10,14 +10,14 @@ The goal of this project was to build a timed coding quiz with multiple-choice q
 - If wrong answer is selected, 10 seconds get deducted from the timer before next question would show.
 - If correct answer is selected, next question shows without any changes to the timer. 
 - Once all questions are answered or if user runs out of time, new screen with results shows up. 
-- User able to enter their initials and save their score. 
-- They have option to try again by pressing button "Try Again".
-- At any point user can view highscores currently stored and clear all results. 
+- User is able to enter their initials and save their score. 
+- They have an option to try again by pressing button "Try Again".
+- At any point user can view highscores currently stored and clear all the results. 
 - Highscores are sorted from highest to lowest and only top 10 results are displayed. 
 
 ## Usage
 
-Web application is located at: 
+Web application is located at: https://vlada-caban.github.io/code-quiz/
 
 To start quiz, user needs to click "Start Quiz" button. User can click "View Highscores" button at any time to view highscores. 
 
