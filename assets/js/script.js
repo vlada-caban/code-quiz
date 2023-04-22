@@ -119,9 +119,8 @@ function showHighscores() {
     for (let i = 0; i < howManyToDisplay; i++) {
       let initials = highScoresToDisplay[i].initials;
       let score = highScoresToDisplay[i].score;
-      let position = i + 1;
       let scoreString =
-        position + ". " + "Initials: " + initials + " " + "Score: " + score;
+        i + 1 + ". " + "Initials: " + initials + " " + "Score: " + score;
       let scoreToDisplay = document.createElement("p");
       scoreToDisplay.innerHTML = scoreString;
       scoreToDisplay.setAttribute("style", "margin: 2%");
@@ -146,10 +145,6 @@ function showHighscores() {
     event.preventDefault();
     localStorage.clear();
     showHighscores();
-    // showScoresSection.innerHTML = "";
-    // let noScoreTitle = document.createElement("h3");
-    // noScoreTitle.innerHTML = "No highscores were saved yet!";
-    // showScoresSection.append(noScoreTitle);
   });
 
   restartBtn.addEventListener("click", restartQuiz);
@@ -172,15 +167,6 @@ function saveScores(score, initials) {
   highScoresArray.push(result);
   localStorage.setItem("highScoresArray", JSON.stringify(highScoresArray));
   showHighscores();
-
-  //!need to check if info was entered
-  // if (result.initials !== "") {
-  //   highScoresArray.push(result);
-  //   localStorage.setItem("highScoresArray", JSON.stringify(highScoresArray));
-  //   showHighscores();
-  // } else {
-  //   alert("Please enter your initials to save score, thank you!");
-  // }
 }
 
 let displayAllDone = function () {
@@ -229,14 +215,17 @@ let displayAllDone = function () {
 
   submitBtn.addEventListener("click", function (event) {
     event.preventDefault();
-    saveScores(finalScore, enterInitials.value.toUpperCase());
+    if (enterInitials.value !== "") {
+      saveScores(finalScore, enterInitials.value.toUpperCase());
+    } else {
+      alert("Please enter your initials!");
+    }
   });
   restartBtn.addEventListener("click", restartQuiz);
 };
 
 //questions display one by one
 let loadQuestion = function () {
-  //checkTimer();
   let answer = document.getElementById("answer");
 
   document.getElementById("questions").innerText = "";
@@ -286,7 +275,9 @@ let loadQuestion = function () {
       if (questionsLeft > 0) {
         loadQuestion();
       } else {
-        displayAllDone();
+        setTimeout(function () {
+          displayAllDone();
+        }, 600);
       }
     });
   }
